@@ -1,2 +1,2 @@
-# grpcServer
-server repository for gRPC protocol
+# grpcClientServer
+Client/Server repository for gRPC protocol

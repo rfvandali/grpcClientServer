@@ -30,3 +30,8 @@
 *.exe
 *.out
 *.app
+
+# GRPC
+*.pb.h
+*.pb.cc
+
