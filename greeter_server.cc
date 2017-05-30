@@ -1,25 +1,21 @@
 #include <iostream>
 #include <memory>
 #include <string>
-
 #include <grpc++/grpc++.h>
-
 #include "helloworld.grpc.pb.h"
-
 
 using grpc::Server;
 using grpc::ServerBuilder;
 using grpc::ServerContext;
 using grpc::Status;
-using helloworld::HelloRequest;
-using helloworld::HelloReply;
-using helloworld::HelloReplyAgain;
+using helloworld::SendRequest;
+using helloworld::StringReply;
+using helloworld::NumberReply;
 using helloworld::Greeter;
 
 // Logic and data behind the server's behavior.
 class GreeterServiceImpl final : public Greeter::Service {
-  Status SayHello(ServerContext* context, const HelloRequest* request, HelloReply* reply) override {
-
+  Status SendString(ServerContext* context, const SendRequest* request, StringReply* reply) override {
     std::string message;
 
     std::cout << "Please type the string you'd like to send, followed by enter:";
@@ -29,8 +25,7 @@ class GreeterServiceImpl final : public Greeter::Service {
     return Status::OK;
   }
 
-  Status SayHelloAgain(ServerContext* context, const HelloRequest* request, HelloReplyAgain* reply) override {
-    
+  Status SendNumber(ServerContext* context, const SendRequest* request, NumberReply* reply) override {
     int number;
 
     std::cout << "Please type the number you'd like to send, followed by enter:";
