@@ -4,11 +4,8 @@
 
 #include <grpc++/grpc++.h>
 
-#ifdef BAZEL_BUILD
-#include "examples/protos/helloworld.grpc.pb.h"
-#else
 #include "helloworld.grpc.pb.h"
-#endif
+
 
 using grpc::Server;
 using grpc::ServerBuilder;
@@ -22,8 +19,12 @@ using helloworld::Greeter;
 class GreeterServiceImpl final : public Greeter::Service {
   Status SayHello(ServerContext* context, const HelloRequest* request,
                   HelloReply* reply) override {
-    std::string prefix("Hello ");
-    reply->set_message(prefix + request->name());
+
+    std::string message;
+    std::cout << "Please type the string you'd like to send, followed by enter:";
+    std::cin >> message;
+
+    reply->set_message(message + request->name());
     return Status::OK;
   }
 };
