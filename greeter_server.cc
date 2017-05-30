@@ -30,12 +30,20 @@ class GreeterServiceImpl final : public Greeter::Service {
 
   Status SayHelloAgain(ServerContext* context, const HelloRequest* request, HelloReply* reply) override {
     
-    std::string number;
+    int number;
 
     std::cout << "Please type the number you'd like to send, followed by enter:";
-    std::getline (std::cin, number);
+    std::cin >> number;
 
-    reply->set_message(number);
+  while(!std::cin){
+    // user didn't input a number
+    std::cin.clear(); // reset failbit
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //skip bad input
+    std::cout << "The input was not numeric, please type the number you'd like to send, followed by enter:";
+    std::cin >> number;
+  }
+
+    reply->set_message(std::to_string(number));
     return Status::OK;
   }
 };
