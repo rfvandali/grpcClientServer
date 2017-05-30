@@ -3,12 +3,8 @@
 #include <string>
 
 #include <grpc++/grpc++.h>
-
-#ifdef BAZEL_BUILD
-#include "examples/protos/helloworld.grpc.pb.h"
-#else
 #include "helloworld.grpc.pb.h"
-#endif
+
 
 using grpc::Channel;
 using grpc::ClientContext;
@@ -24,11 +20,10 @@ class GreeterClient {
 
   // Assembles the client's payload, sends it and presents the response back
   // from the server.
-  std::string SayHello(const std::string& user) {
+  std::string SayHello() {
     // Data we are sending to the server.
     HelloRequest request;
-    request.set_name(user);
-
+    
     // Container for the data we expect from the server.
     HelloReply reply;
 
@@ -49,10 +44,9 @@ class GreeterClient {
     }
   }
 
-  std::string SayHelloAgain(const std::string& user) {
+  std::string SayHelloAgain() {
     // Follows the same pattern as SayHello.
     HelloRequest request;
-    request.set_name(user);
     HelloReply reply;
     ClientContext context;
 
@@ -77,10 +71,11 @@ int main(int argc, char** argv) {
   // localhost at port 50051). We indicate that the channel isn't authenticated
   // (use of InsecureChannelCredentials()).
   GreeterClient greeter(grpc::CreateChannel("localhost:50051", grpc::InsecureChannelCredentials()));
-  std::string user = "world";
-  std::string reply = greeter.SayHello(user);
+  
+  std::string reply = greeter.SayHello();
   std::cout << "The following string was received by the client: " << reply << std::endl;
-  reply = greeter.SayHelloAgain(user);
+  
+  reply = greeter.SayHelloAgain();
   std::cout << "The following number was received by the client: " << reply << std::endl;
 
   return 0;
