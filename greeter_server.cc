@@ -13,6 +13,7 @@ using grpc::ServerContext;
 using grpc::Status;
 using helloworld::HelloRequest;
 using helloworld::HelloReply;
+using helloworld::HelloReplyAgain;
 using helloworld::Greeter;
 
 // Logic and data behind the server's behavior.
@@ -28,7 +29,7 @@ class GreeterServiceImpl final : public Greeter::Service {
     return Status::OK;
   }
 
-  Status SayHelloAgain(ServerContext* context, const HelloRequest* request, HelloReply* reply) override {
+  Status SayHelloAgain(ServerContext* context, const HelloRequest* request, HelloReplyAgain* reply) override {
     
     int number;
 
@@ -43,7 +44,7 @@ class GreeterServiceImpl final : public Greeter::Service {
     std::cin >> number;
   }
 
-    reply->set_message(std::to_string(number));
+    reply->set_number(number);
     return Status::OK;
   }
 };

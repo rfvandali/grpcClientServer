@@ -11,6 +11,7 @@ using grpc::ClientContext;
 using grpc::Status;
 using helloworld::HelloRequest;
 using helloworld::HelloReply;
+using helloworld::HelloReplyAgain;
 using helloworld::Greeter;
 
 class GreeterClient {
@@ -44,20 +45,22 @@ class GreeterClient {
     }
   }
 
-  std::string SayHelloAgain() {
+  int SayHelloAgain() {
     // Follows the same pattern as SayHello.
     HelloRequest request;
-    HelloReply reply;
+    HelloReplyAgain reply;
     ClientContext context;
 
     // Here we can the stub's newly available method we just added.
     Status status = stub ->SayHelloAgain(&context, request, &reply);
     if (status.ok()) {
-      return reply.message();
+      return reply.number();
     } else {
       std::cout << status.error_code() << ": " << status.error_message()
+                << std::endl
+                << "RPC failed"
                 << std::endl;
-      return "RPC failed";
+      return 0;
     }
   }
 
@@ -72,11 +75,11 @@ int main(int argc, char** argv) {
   // (use of InsecureChannelCredentials()).
   GreeterClient greeter(grpc::CreateChannel("localhost:50051", grpc::InsecureChannelCredentials()));
   
-  std::string reply = greeter.SayHello();
-  std::cout << "The following string was received by the client: " << reply << std::endl;
+  std::string stringReply = greeter.SayHello();
+  std::cout << "The following string was received by the client: " << stringReply << std::endl;
   
-  reply = greeter.SayHelloAgain();
-  std::cout << "The following number was received by the client: " << reply << std::endl;
+  int numReply = greeter.SayHelloAgain();
+  std::cout << "The following number was received by the client: " << numReply << std::endl;
 
   return 0;
 }
