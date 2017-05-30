@@ -13,7 +13,7 @@ $ ./greeter_server
 $ ./greeter_client (in a seperate terminal window)  
 
 You will then be prompted to type a string and then number in the terminal where the greeter_server was executed.
-The string and number should then be received by the client.
+The string and number should then be received by the client and printed to screen.
 
 Design Decision:
 ================
