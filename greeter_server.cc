@@ -17,14 +17,25 @@ using helloworld::Greeter;
 
 // Logic and data behind the server's behavior.
 class GreeterServiceImpl final : public Greeter::Service {
-  Status SayHello(ServerContext* context, const HelloRequest* request,
-                  HelloReply* reply) override {
+  Status SayHello(ServerContext* context, const HelloRequest* request, HelloReply* reply) override {
 
     std::string message;
-    std::cout << "Please type the string you'd like to send, followed by enter:";
-    std::cin >> message;
 
-    reply->set_message(message + request->name());
+    std::cout << "Please type the string you'd like to send, followed by enter:";
+    std::getline (std::cin, message);
+
+    reply->set_message(message);
+    return Status::OK;
+  }
+
+  Status SayHelloAgain(ServerContext* context, const HelloRequest* request, HelloReply* reply) override {
+    
+    std::string number;
+
+    std::cout << "Please type the number you'd like to send, followed by enter:";
+    std::getline (std::cin, number);
+
+    reply->set_message(number);
     return Status::OK;
   }
 };

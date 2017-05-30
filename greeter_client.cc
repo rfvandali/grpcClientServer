@@ -20,7 +20,7 @@ using helloworld::Greeter;
 class GreeterClient {
  public:
   GreeterClient(std::shared_ptr<Channel> channel)
-      : stub_(Greeter::NewStub(channel)) {}
+      : stub (Greeter::NewStub(channel)) {}
 
   // Assembles the client's payload, sends it and presents the response back
   // from the server.
@@ -37,7 +37,7 @@ class GreeterClient {
     ClientContext context;
 
     // The actual RPC.
-    Status status = stub_->SayHello(&context, request, &reply);
+    Status status = stub ->SayHello(&context, request, &reply);
 
     // Act upon its status.
     if (status.ok()) {
@@ -49,8 +49,26 @@ class GreeterClient {
     }
   }
 
+  std::string SayHelloAgain(const std::string& user) {
+    // Follows the same pattern as SayHello.
+    HelloRequest request;
+    request.set_name(user);
+    HelloReply reply;
+    ClientContext context;
+
+    // Here we can the stub's newly available method we just added.
+    Status status = stub ->SayHelloAgain(&context, request, &reply);
+    if (status.ok()) {
+      return reply.message();
+    } else {
+      std::cout << status.error_code() << ": " << status.error_message()
+                << std::endl;
+      return "RPC failed";
+    }
+  }
+
  private:
-  std::unique_ptr<Greeter::Stub> stub_;
+  std::unique_ptr<Greeter::Stub> stub ;
 };
 
 int main(int argc, char** argv) {
@@ -58,11 +76,12 @@ int main(int argc, char** argv) {
   // are created. This channel models a connection to an endpoint (in this case,
   // localhost at port 50051). We indicate that the channel isn't authenticated
   // (use of InsecureChannelCredentials()).
-  GreeterClient greeter(grpc::CreateChannel(
-      "localhost:50051", grpc::InsecureChannelCredentials()));
+  GreeterClient greeter(grpc::CreateChannel("localhost:50051", grpc::InsecureChannelCredentials()));
   std::string user = "world";
   std::string reply = greeter.SayHello(user);
-  std::cout << "Greeter received: " << reply << std::endl;
+  std::cout << "The following string was received by the client: " << reply << std::endl;
+  reply = greeter.SayHelloAgain(user);
+  std::cout << "The following number was received by the client: " << reply << std::endl;
 
   return 0;
 }
